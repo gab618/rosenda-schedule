@@ -1,0 +1,6 @@
+ScheduleTableIAM:
+  Effect: Allow
+  Action:
+    - dynamodb:PutItem
+  Resource:
+    - ${self:custom.ScheduleTable.arn}

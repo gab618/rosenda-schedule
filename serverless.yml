@@ -11,31 +11,24 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: "us-east-1"
+  environment:
+    SCHEDULE_TABLE_NAME: ${self:custom.ScheduleTable.name}
   iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-      Resource:
-        - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/ScheduleTable
+    - ${file(iam/ScheduleTableIAM.yml):ScheduleTableIAM}
 
 resources:
   Resources:
-    ScheduleTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ScheduleTable
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
+    ScheduleTable: ${file(resources/ScheduleTable.yml):ScheduleTable}
 
 functions:
-  hello:
-    handler: src/handlers/hello.handler
+  schedule:
+    handler: src/handlers/schedule.handler
     events:
       - http:
-          method: GET
-          path: /hello
+          method: POST
+          path: /schedule
+
+custom:
+  ScheduleTable:
+    name: !Ref ScheduleTable
+    arn: !GetAtt ScheduleTable.Arn

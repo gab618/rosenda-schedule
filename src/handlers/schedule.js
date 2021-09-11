@@ -8,7 +8,23 @@ import createError from "http-errors";
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 async function schedule(event, context) {
-  const { id, daysOff } = event.body;
+  const { id, daysOff, password } = event.body;
+
+  if (password !== "senha") {
+    return {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Methods": "OPTIONS,POST",
+        "Access-Control-Allow-Origin": "*",
+        "X-Requested-With": "*",
+      },
+      statusCode: 401,
+      body: JSON.stringify({ message: "Senha incorreta!" }),
+    };
+  }
+
   const now = new Date();
 
   const monthSchedule = {
@@ -31,6 +47,14 @@ async function schedule(event, context) {
 
   return {
     statusCode: 201,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Headers":
+        "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+      "Access-Control-Allow-Methods": "OPTIONS,POST",
+      "Access-Control-Allow-Origin": "*",
+      "X-Requested-With": "*",
+    },
     body: JSON.stringify(monthSchedule),
   };
 }

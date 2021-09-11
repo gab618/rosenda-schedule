@@ -27,6 +27,7 @@ functions:
       - http:
           method: POST
           path: /schedule
+          cors: true
 
 custom:
   ScheduleTable:

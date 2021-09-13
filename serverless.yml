@@ -29,6 +29,22 @@ functions:
           path: /schedule
           cors: true
 
+  getSchedule:
+    handler: src/handlers/getSchedule.handler
+    events:
+      - http:
+          method: GET
+          path: /schedule
+          cors: true
+
+  getScheduleById:
+    handler: src/handlers/getScheduleById.handler
+    events:
+      - http:
+          method: GET
+          path: /schedule/{id}
+          cors: true
+
 custom:
   ScheduleTable:
     name: !Ref ScheduleTable

@@ -10,7 +10,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 async function schedule(event, context) {
   const { id, daysOff, password } = event.body;
 
-  if (password !== "senha") {
+  if (password !== process.env.SECRET.trim()) {
     return {
       headers: {
         "Content-Type": "application/json",

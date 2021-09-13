@@ -13,6 +13,7 @@ provider:
   region: "us-east-1"
   environment:
     SCHEDULE_TABLE_NAME: ${self:custom.ScheduleTable.name}
+    SECRET: ${file(secret.pem)}
   iamRoleStatements:
     - ${file(iam/ScheduleTableIAM.yml):ScheduleTableIAM}
 
